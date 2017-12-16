@@ -82,9 +82,9 @@ public class View {
 	}
 
 	public int mostrarOpcionesEmpleado() {
-		System.out.println("Elige la opcion deseada:\n" + "1.- Editar mi información personal.\n"
+		System.out.println("====================\nLista de opciones:\n====================\n" + "1.- Editar mi información personal.\n"
 				+ "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n" + "4.- Eliminar contacto.\n"
-				+ "5.- Importar contactos de otra agenda.\n6.-Salir");
+				+ "5.- Ver contactos\n" + "6.- Importar contactos de otra agenda.\n7.-Salir");
 		return leerOpcionesMenu(6);
 	}
 
@@ -195,6 +195,26 @@ public class View {
 				e.printStackTrace();
 			}
 			return null;
+		}
+	}
+
+	public void verContactos(Agenda a) {
+		Scanner sc = new Scanner(System.in);
+		ArrayList<Contacto> lista = (ArrayList<Contacto>) a.getListaContactos();
+		if (!lista.isEmpty()) {
+			System.out.println("Lista de contactos:");
+			for (int i = 0; i < lista.size(); i++) {
+				System.out.println(i + 1 + ".-" + lista.get(i).getName());
+			}
+			System.out.println("Pulsa intro para continuar..");
+			sc.nextLine();
+		} else {
+			System.out.println("No hay contactos.");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

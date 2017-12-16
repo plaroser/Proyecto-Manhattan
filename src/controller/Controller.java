@@ -50,8 +50,8 @@ public class Controller {
 			agenda = Agenda.cargarAgendaDeArchivo(archivo);
 		boolean salir = false;
 		do {
-		// Su la agenda esta creada
-		if (agenda != null) {
+			// Su la agenda esta creada
+			if (agenda != null) {
 				// Muestra el menu de empleado
 				int opcion = view.mostrarOpcionesEmpleado();
 				switch (opcion) {
@@ -84,7 +84,11 @@ public class Controller {
 					}
 					break;
 				case 5:
-					// 5.- Importar contactos de otra agenda.
+					// 5.- Ver contactos
+					view.verContactos(agenda);
+					break;
+				case 6:
+					// 6.- Importar contactos de otra agenda.
 					telefono = view.leerTelefono();
 					archivo = buscarAgenda(telefono);
 					if (archivo != null) {
@@ -101,17 +105,17 @@ public class Controller {
 					}
 					break;
 
-				case 6:
+				case 7:
 					salir = true;
 					break;
 				default:
 					break;
 				}
-		} else {
-			// Crear la agenda
-			agenda = view.crearAgenda(nTelefono);
-		}
-		Agenda.guardarAgenda(agenda);
+			} else {
+				// Crear la agenda
+				agenda = view.crearAgenda(nTelefono);
+			}
+			Agenda.guardarAgenda(agenda);
 		} while (!salir);
 	}
 
