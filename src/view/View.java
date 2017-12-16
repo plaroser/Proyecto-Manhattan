@@ -18,7 +18,7 @@ public class View {
 
 	private final String MENU_PRINCIPAL = "----\nMenu princial\n----\n1.- Iniciar sesión como director.\n2.- Iniciar sesion como empleado.";
 	private final String INTRODUCE_OPCION = "Introduce la opción deseada: ";
-	private final String MENU_CARGAR_TELEFONO = "\n----\nIniciar sesión\n----\nIntroduce tu número de telefono: ";
+	private final String MENU_CARGAR_TELEFONO = "Introduce tu número de telefono: ";
 	private final String ERROR_OPCION_ERRONEA = "ERROR: Opcion no disponible.";
 	private final String ERROR_NUMERO_TELEFONO = "ERROR: Numero de telefono no valido.";
 
@@ -78,13 +78,22 @@ public class View {
 		return numero;
 	}
 
-	public void mostrarOpcionesEmpleado() {
-		System.out.println("opciones empleado");
+	public int mostrarOpcionesEmpleado() {
+		System.out.println("Elige la opcion deseada:\n" + "1.- Editar mi información personal.\n"
+				+ "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n" + "4.- Eliminar contacto.\n"
+				+ "5.- Importar contactos de otra agenda.");
+		return leerOpcionesMenu(5);
 	}
 
-	public Agenda crearAgenda() {
-		System.out.println("----\nCreando agenda:\n----");
-		System.out.print("Introduce tu nombre: ");
+	public Agenda crearAgenda(int nTelefono) {
+		System.out.println("Crear agenda...");
+		ArrayList<Contacto> listaContactos = new ArrayList<>();
+		return editarInformacion(nTelefono, listaContactos);
+	}
+
+	public Agenda editarInformacion(int nTelefono, ArrayList<Contacto> listaContactos) {
+		sc.nextLine();
+		System.out.println("Introduce tu nombre: ");
 		String nombre = sc.nextLine();
 		System.out.print("Introduce tus apellidos: ");
 		String apellidos = sc.nextLine();
@@ -94,13 +103,12 @@ public class View {
 		String departamento = sc.nextLine();
 		System.out.print("Introduce tu fecha de inicio: ");
 		String fInicio = sc.nextLine();
-		ArrayList<String> listaCodigos = new ArrayList<>();
-		ArrayList<Contacto> listaContactos = new ArrayList<>();
-		int nTel = leerTelefono();
 		GruposSanguineos grupoSan = leerGrupoSanguineo();
 		TipoDeArchivos tipo = leerTipoDeArchivo();
-		Empleado a = new Empleado(nTel, nombre, apellidos, fnacimiento, departamento, fInicio, listaCodigos,
+		ArrayList<String> listaCodigos = leerListaCodigos();
+		Empleado a = new Empleado(nTelefono, nombre, apellidos, fnacimiento, departamento, fInicio, listaCodigos,
 				grupoSan.toString());
+		System.out.println("Agenda guardad con exito!");
 		return new Agenda(a, listaContactos, tipo.toString());
 	}
 
@@ -108,18 +116,56 @@ public class View {
 		System.out.println("Selecciona tu tipo de archivo:");
 		TipoDeArchivos[] tipos = TipoDeArchivos.values();
 		for (int i = 0; i < tipos.length; i++) {
-			System.out.println(i + 1 + tipos[i].toString());
+			System.out.println(i + 1 + ".- " + tipos[i].name());
 		}
 		return tipos[leerOpcionesMenu(tipos.length) - 1];
 	}
 
+	private ArrayList<String> leerListaCodigos() {
+		System.out.println("Creando lista de codigos de operaciones.\n" + "");
+		ArrayList<String> listaCodigos = new ArrayList<>();
+		boolean esCorrecto = false, salir = false;
+		sc.nextLine();
+		do {
+			System.out.println("Codigo de ejemplo: \"ABC-123\"");
+			System.out.print("Introduce un codigo o pulsa intro para terminar: ");
+			String aux = sc.nextLine();
+			Matcher m = Pattern.compile("^\\D{3}[-]\\d{3}$").matcher(aux);
+			esCorrecto = m.find();
+			if (esCorrecto) {
+				listaCodigos.add(aux.toUpperCase());
+			} else if (aux.equals("")) {
+				salir = true;
+			} else {
+				System.out.println("ERROR: Debes introducir un codigo o dejarlo vacio y pulsar intro.");
+			}
+		} while (!salir);
+		return listaCodigos;
+	}
+
 	private GruposSanguineos leerGrupoSanguineo() {
+
 		System.out.println("Introduce tu grupo sanguineo:");
 		GruposSanguineos[] grupos = GruposSanguineos.values();
 		for (int i = 0; i < grupos.length; i++) {
-			System.out.println(i + 1 + grupos[i].toString());
+			System.out.println(i + 1 + ".- " + grupos[i].toString());
 		}
 		return grupos[leerOpcionesMenu(grupos.length) - 1];
 	}
 
+	public Contacto crearContacto() {
+		Contacto c = new Contacto();
+		System.out.println("Introduce el nombre del contacto:");
+		String nombre = sc.nextLine();
+		c.setName(nombre);
+		int numero = leerTelefono();
+		c.setnTelf(numero);
+		System.out.println("¿Es contacto especial?\nIntroduce \"S\" para si o cualquier otra cosa para no:");
+		String aux = sc.nextLine();
+		boolean esEpecial = aux.toUpperCase().equals("S");
+		c.setSpecial(esEpecial);
+		return c;
+	}
+
+	
 }

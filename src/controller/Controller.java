@@ -8,8 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 
 import models.Agenda;
+import models.Contacto;
 import view.View;
 
 /**
@@ -20,6 +22,7 @@ import view.View;
 public class Controller {
 
 	View view;
+	private int nTelefono;
 
 	public void startProgram() {
 		view = new View();
@@ -29,21 +32,41 @@ public class Controller {
 			opcionesDirector();
 			break;
 		case 2:
-			leerNumeroTelefono();
+			opcionesEmpleado();
 			break;
 		}
 	}
 
-	private void leerNumeroTelefono() {
-		File archivo = buscarAgenda(view.leerTelefono());
+	private void opcionesEmpleado() {
+		int telefono = view.leerTelefono();
+		File archivo = buscarAgenda(telefono);
+		this.nTelefono = telefono;
 		Agenda agenda = null;
 		if (archivo != null)
 			agenda = Agenda.cargarAgendaDeArchivo(archivo);
 		if (agenda != null) {
-			view.mostrarOpcionesEmpleado();
+			int opcion = view.mostrarOpcionesEmpleado();
+			switch (opcion) {
+			case 1:
+				agenda = view.editarInformacion(telefono, (ArrayList<Contacto>) agenda.getListaContactos());
+				break;
+			case 2:
+				agenda.getListaContactos().add(view.crearContacto());
+				break;
+			case 3:
+				
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			default:
+				break;
+			}
 		} else {
-			view.crearAgenda();
+			agenda = view.crearAgenda(nTelefono);
 		}
+		Agenda.guardarAgenda(agenda);
 	}
 
 	private File buscarAgenda(int numeroTelefono) {
@@ -73,10 +96,6 @@ public class Controller {
 	private void opcionesDirector() {
 		// TODO Auto-generated method stub
 
-	}
-
-	private void opcionesEmpleado() {
-		view.mostrarOpcionesEmpleado();
 	}
 
 }

@@ -132,7 +132,7 @@ public class Agenda implements Serializable {
 		return o;
 	}
 
-	public void guardarAgenda(Agenda a) {
+	public static void guardarAgenda(Agenda a) {
 		switch (a.getTipoDeArchivo()) {
 		case json:
 			guardarAgendaJSon(a);
@@ -145,7 +145,7 @@ public class Agenda implements Serializable {
 		}
 	}
 
-	private boolean guardarAgendaXML(Agenda a) {
+	private static boolean guardarAgendaXML(Agenda a) {
 		boolean esCorrecto = false;
 		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.xml) {
 			XStream xstreamML = new XStream();
@@ -165,7 +165,7 @@ public class Agenda implements Serializable {
 		return esCorrecto;
 	}
 
-	private boolean guardarAgendaJSon(Agenda a) {
+	private static boolean guardarAgendaJSon(Agenda a) {
 		boolean esCorrecto = false;
 		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.json) {
 			XStream xstream = new XStream(new JettisonMappedXmlDriver());
@@ -186,7 +186,7 @@ public class Agenda implements Serializable {
 		return esCorrecto;
 	}
 
-	private boolean guardarAgendaJSer(Agenda a) {
+	private static boolean guardarAgendaJSer(Agenda a) {
 		boolean esCorrecto = false;
 		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.serializado) {
 			try {
