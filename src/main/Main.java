@@ -27,12 +27,8 @@ public class Main {
 		// writer.write(json);
 		// writer.close();
 		Controller controller = new Controller();
-		try {
 			controller.startProgram();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 }

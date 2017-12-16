@@ -18,7 +18,7 @@ public class View {
 
 	private final String MENU_PRINCIPAL = "----\nMenu princial\n----\n1.- Iniciar sesión como director.\n2.- Iniciar sesion como empleado.";
 	private final String INTRODUCE_OPCION = "Introduce la opción deseada: ";
-	private final String MENU_CARGAR_TELEFONO = "Introduce tu número de telefono: ";
+	private final String MENU_CARGAR_TELEFONO = "Introduce el número de telefono: ";
 	private final String ERROR_OPCION_ERRONEA = "ERROR: Opcion no disponible.";
 	private final String ERROR_NUMERO_TELEFONO = "ERROR: Numero de telefono no valido.";
 
@@ -56,6 +56,7 @@ public class View {
 			esCorrecto = opcion > 0 && opcion <= opcionesMaximas;
 			if (!esCorrecto)
 				System.out.println(ERROR_OPCION_ERRONEA);
+
 		} while (!esCorrecto);
 		return opcion;
 	}
@@ -72,8 +73,10 @@ public class View {
 			esCorrecto = m.find();
 			if (esCorrecto)
 				numero = Integer.parseInt(aux);
-			else
+			else {
 				System.out.println(ERROR_NUMERO_TELEFONO);
+
+			}
 		} while (!esCorrecto);
 		return numero;
 	}
@@ -109,6 +112,7 @@ public class View {
 		Empleado a = new Empleado(nTelefono, nombre, apellidos, fnacimiento, departamento, fInicio, listaCodigos,
 				grupoSan.toString());
 		System.out.println("Agenda guardad con exito!");
+
 		return new Agenda(a, listaContactos, tipo.toString());
 	}
 
@@ -138,6 +142,7 @@ public class View {
 				salir = true;
 			} else {
 				System.out.println("ERROR: Debes introducir un codigo o dejarlo vacio y pulsar intro.");
+
 			}
 		} while (!salir);
 		return listaCodigos;
@@ -165,25 +170,40 @@ public class View {
 		String aux = sc.nextLine();
 		boolean esEpecial = aux.toUpperCase().equals("S");
 		c.setSpecial(esEpecial);
+		System.out.println("Contacto guardado con exito!");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		return c;
 	}
 
-	public Contacto seleccionarContacto(Agenda a) throws InterruptedException {
+	public Contacto seleccionarContacto(Agenda a) {
 		ArrayList<Contacto> lista = (ArrayList<Contacto>) a.getListaContactos();
 		if (!lista.isEmpty()) {
 			System.out.println("Introduce una opcion para seleccionar un contacto:");
 			for (int i = 0; i < lista.size(); i++) {
 				System.out.println(i + 1 + ".-" + lista.get(i).getName());
 			}
-			return lista.get(leerOpcionesMenu(lista.size())-1);
+			return lista.get(leerOpcionesMenu(lista.size()) - 1);
 		} else {
 			System.out.println("No hay contactos.");
-			Thread.sleep(1500);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return null;
 		}
 	}
 
 	public void mostrarMensaje(String mensaje) {
 		System.out.println(mensaje);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
