@@ -38,32 +38,67 @@ public class Controller {
 	}
 
 	private void opcionesEmpleado() {
+		// Lee el telefono
 		int telefono = view.leerTelefono();
+		// Busca el archivo en el dispositivo
 		File archivo = buscarAgenda(telefono);
+		// Establece el numero de telefono
 		this.nTelefono = telefono;
 		Agenda agenda = null;
+		// Si ha encontrado el archivo
 		if (archivo != null)
 			agenda = Agenda.cargarAgendaDeArchivo(archivo);
+		// Su la agenda esta creada
 		if (agenda != null) {
+			// Muestra el menu de empleado
 			int opcion = view.mostrarOpcionesEmpleado();
 			switch (opcion) {
+
 			case 1:
+				// 1.- Editar mi información personal.\n"
 				agenda = view.editarInformacion(telefono, (ArrayList<Contacto>) agenda.getListaContactos());
 				break;
 			case 2:
-				agenda.getListaContactos().add(view.crearContacto());
+				// 2.- Añadir contacto.
+				ArrayList<Contacto> listaContactos = (ArrayList<Contacto>) agenda.getListaContactos();
+				listaContactos.add(view.crearContacto());
 				break;
 			case 3:
-				
+				// 3.- Actualizar contacto.
+				Contacto c = view.seleccionarContacto(agenda);
+				if (c != null) {
+					int indice = agenda.getListaContactos().indexOf(c);
+					c = view.crearContacto();
+					agenda.getListaContactos().set(indice, c);
+				}
 				break;
 			case 4:
+				// 4.- Eliminar contacto.
+				c = view.seleccionarContacto(agenda);
+				if (c != null) {
+					int indice = agenda.getListaContactos().indexOf(c);
+					agenda.getListaContactos().remove(indice);
+
+				}
 				break;
 			case 5:
+				// 5.- Importar contactos de otra agenda.
+				telefono = view.leerTelefono();
+				archivo = buscarAgenda(telefono);
+				if (archivo != null) {
+					Agenda nuevaAgenda = Agenda.cargarAgendaDeArchivo(archivo);
+					for (Contacto contacto : nuevaAgenda.getListaContactos()) {
+						agenda.getListaContactos().add(contacto);
+					}
+				} else {
+					view.mostrarMensaje("ERROR: Agenda no encontrada");
+				}
 				break;
 			default:
 				break;
 			}
 		} else {
+			// Crear la agenda
 			agenda = view.crearAgenda(nTelefono);
 		}
 		Agenda.guardarAgenda(agenda);
@@ -94,7 +129,6 @@ public class Controller {
 	}
 
 	private void opcionesDirector() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -22,8 +22,6 @@ public class View {
 	private final String ERROR_OPCION_ERRONEA = "ERROR: Opcion no disponible.";
 	private final String ERROR_NUMERO_TELEFONO = "ERROR: Numero de telefono no valido.";
 
-	private final Scanner sc = new Scanner(System.in);
-
 	/**
 	 * Muestra el menu principal y lee la opcion elegida
 	 * 
@@ -42,6 +40,7 @@ public class View {
 	 * @return opcion seleccionada
 	 */
 	private int leerOpcionesMenu(int opcionesMaximas) {
+		Scanner sc = new Scanner(System.in);
 		boolean esCorrecto;
 		int opcion = 0;
 		String aux = null;
@@ -62,6 +61,7 @@ public class View {
 	}
 
 	public int leerTelefono() {
+		Scanner sc = new Scanner(System.in);
 		boolean esCorrecto;
 		int numero = 0;
 		do {
@@ -87,12 +87,12 @@ public class View {
 
 	public Agenda crearAgenda(int nTelefono) {
 		System.out.println("Crear agenda...");
-		ArrayList<Contacto> listaContactos = new ArrayList<>();
+		ArrayList<Contacto> listaContactos = new ArrayList<>(5);
 		return editarInformacion(nTelefono, listaContactos);
 	}
 
 	public Agenda editarInformacion(int nTelefono, ArrayList<Contacto> listaContactos) {
-		sc.nextLine();
+		Scanner sc = new Scanner(System.in);
 		System.out.println("Introduce tu nombre: ");
 		String nombre = sc.nextLine();
 		System.out.print("Introduce tus apellidos: ");
@@ -122,10 +122,10 @@ public class View {
 	}
 
 	private ArrayList<String> leerListaCodigos() {
+		Scanner sc = new Scanner(System.in);
 		System.out.println("Creando lista de codigos de operaciones.\n" + "");
 		ArrayList<String> listaCodigos = new ArrayList<>();
 		boolean esCorrecto = false, salir = false;
-		sc.nextLine();
 		do {
 			System.out.println("Codigo de ejemplo: \"ABC-123\"");
 			System.out.print("Introduce un codigo o pulsa intro para terminar: ");
@@ -154,6 +154,7 @@ public class View {
 	}
 
 	public Contacto crearContacto() {
+		Scanner sc = new Scanner(System.in);
 		Contacto c = new Contacto();
 		System.out.println("Introduce el nombre del contacto:");
 		String nombre = sc.nextLine();
@@ -167,5 +168,21 @@ public class View {
 		return c;
 	}
 
-	
+	public Contacto seleccionarContacto(Agenda a) {
+		ArrayList<Contacto> lista = (ArrayList<Contacto>) a.getListaContactos();
+		if (!lista.isEmpty()) {
+			System.out.println("Introduce una opcion para seleccionar un contacto:");
+			for (int i = 0; i < lista.size(); i++) {
+				System.out.println(i + 1 + ".-" + lista.get(i).getName());
+			}
+			return lista.get(leerOpcionesMenu(lista.size() - 1));
+		} else {
+			System.out.println("No hay contactos.");
+			return null;
+		}
+	}
+
+	public void mostrarMensaje(String mensaje) {
+		System.out.println(mensaje);
+	}
 }

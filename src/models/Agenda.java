@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import enums.TipoDeArchivos;
 
@@ -27,14 +28,13 @@ public class Agenda implements Serializable {
 	private Empleado empleado;
 	private List<Contacto> listaContactos;
 	private String tipoDeArchivo;
-	private final static XStream xstreamXML = new XStream();
+	// private static XStream xstreamXML = new XStream();
 
 	public Agenda(Empleado empleado, List<Contacto> listaContactos, String tipoDeArchivo) {
 		super();
 		this.empleado = empleado;
 		this.listaContactos = listaContactos;
 		this.tipoDeArchivo = tipoDeArchivo;
-		xstreamXML.alias(Agenda.ALIAS, Agenda.class);
 	}
 
 	public TipoDeArchivos getTipoDeArchivo() {
@@ -64,7 +64,6 @@ public class Agenda implements Serializable {
 	public static Agenda cargarAgendaDeArchivo(File archivo) {
 		String[] s = archivo.getName().split("\\.(?=[^\\.]+$)");
 		String extension = s[s.length - 1];
-		System.out.println(TipoDeArchivos.getTipo("." + extension));
 		switch (TipoDeArchivos.getTipo("." + extension)) {
 		case json:
 			return cargarAgendaJSon(archivo);
@@ -81,9 +80,14 @@ public class Agenda implements Serializable {
 	}
 
 	private static Agenda cargarAgendaXML(File archivo) {
+		XStream xstreamXML = new XStream(new DomDriver());
+		xstreamXML.alias("Contacto", Contacto.class);
+		xstreamXML.alias("Empleado", Empleado.class);
+		xstreamXML.alias("Agenda", Agenda.class);
 		Agenda agenda = null;
 		try {
-			agenda = (Agenda) xstreamXML.fromXML(new String(Files.readAllBytes(archivo.toPath())));
+			String xml = new String(Files.readAllBytes(archivo.toPath()));
+			agenda = (Agenda) xstreamXML.fromXML(xml);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -95,6 +99,8 @@ public class Agenda implements Serializable {
 
 		XStream xstreamJSon = new XStream(new JettisonMappedXmlDriver());
 		xstreamJSon.alias(Agenda.ALIAS, Agenda.class);
+		xstreamJSon.alias("Contacto", Contacto.class);
+		xstreamJSon.alias("Empleado", Empleado.class);
 
 		Agenda agenda = null;
 		try {
@@ -148,13 +154,16 @@ public class Agenda implements Serializable {
 	private static boolean guardarAgendaXML(Agenda a) {
 		boolean esCorrecto = false;
 		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.xml) {
-			XStream xstreamML = new XStream();
+			XStream xstreamXML = new XStream();
+			xstreamXML.alias(Agenda.ALIAS, Agenda.class);
+			xstreamXML.alias("Contacto", Contacto.class);
+			xstreamXML.alias("Empleado", Empleado.class);
 			Writer writerXML = null;
 			try {
 				writerXML = new FileWriter(
 						Agenda.RUTA_AGENDAS + a.getEmpleado().getnTel() + a.getTipoDeArchivo().toString(), false);
-				xstreamML.alias(Agenda.ALIAS, Agenda.class);
-				writerXML.write(xstreamML.toXML(a));
+				xstreamXML.alias(Agenda.ALIAS, Agenda.class);
+				writerXML.write(xstreamXML.toXML(a));
 				writerXML.close();
 				esCorrecto = true;
 			} catch (IOException e) {
@@ -172,6 +181,8 @@ public class Agenda implements Serializable {
 			Writer writerXML = null;
 			xstream.setMode(XStream.NO_REFERENCES);
 			xstream.alias(Agenda.ALIAS, Agenda.class);
+			xstream.alias("Contacto", Contacto.class);
+			xstream.alias("Empleado", Empleado.class);
 			try {
 				writerXML = new FileWriter(
 						Agenda.RUTA_AGENDAS + a.getEmpleado().getnTel() + a.getTipoDeArchivo().toString(), false);
