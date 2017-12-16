@@ -24,7 +24,7 @@ public class Controller {
 	View view;
 	private int nTelefono;
 
-	public void startProgram() {
+	public void startProgram() throws InterruptedException {
 		view = new View();
 
 		switch (view.mostarMenuPrincipal()) {
@@ -37,7 +37,7 @@ public class Controller {
 		}
 	}
 
-	private void opcionesEmpleado() {
+	private void opcionesEmpleado() throws InterruptedException {
 		// Lee el telefono
 		int telefono = view.leerTelefono();
 		// Busca el archivo en el dispositivo
@@ -50,53 +50,59 @@ public class Controller {
 			agenda = Agenda.cargarAgendaDeArchivo(archivo);
 		// Su la agenda esta creada
 		if (agenda != null) {
-			// Muestra el menu de empleado
-			int opcion = view.mostrarOpcionesEmpleado();
-			switch (opcion) {
+			boolean salir = false;
+			do {
+				// Muestra el menu de empleado
+				int opcion = view.mostrarOpcionesEmpleado();
+				switch (opcion) {
 
-			case 1:
-				// 1.- Editar mi información personal.\n"
-				agenda = view.editarInformacion(telefono, (ArrayList<Contacto>) agenda.getListaContactos());
-				break;
-			case 2:
-				// 2.- Añadir contacto.
-				ArrayList<Contacto> listaContactos = (ArrayList<Contacto>) agenda.getListaContactos();
-				listaContactos.add(view.crearContacto());
-				break;
-			case 3:
-				// 3.- Actualizar contacto.
-				Contacto c = view.seleccionarContacto(agenda);
-				if (c != null) {
-					int indice = agenda.getListaContactos().indexOf(c);
-					c = view.crearContacto();
-					agenda.getListaContactos().set(indice, c);
-				}
-				break;
-			case 4:
-				// 4.- Eliminar contacto.
-				c = view.seleccionarContacto(agenda);
-				if (c != null) {
-					int indice = agenda.getListaContactos().indexOf(c);
-					agenda.getListaContactos().remove(indice);
-
-				}
-				break;
-			case 5:
-				// 5.- Importar contactos de otra agenda.
-				telefono = view.leerTelefono();
-				archivo = buscarAgenda(telefono);
-				if (archivo != null) {
-					Agenda nuevaAgenda = Agenda.cargarAgendaDeArchivo(archivo);
-					for (Contacto contacto : nuevaAgenda.getListaContactos()) {
-						agenda.getListaContactos().add(contacto);
+				case 1:
+					// 1.- Editar mi información personal.\n"
+					agenda = view.editarInformacion(telefono, (ArrayList<Contacto>) agenda.getListaContactos());
+					break;
+				case 2:
+					// 2.- Añadir contacto.
+					ArrayList<Contacto> listaContactos = (ArrayList<Contacto>) agenda.getListaContactos();
+					listaContactos.add(view.crearContacto());
+					break;
+				case 3:
+					// 3.- Actualizar contacto.
+					Contacto c = view.seleccionarContacto(agenda);
+					if (c != null) {
+						int indice = agenda.getListaContactos().indexOf(c);
+						c = view.crearContacto();
+						agenda.getListaContactos().set(indice, c);
 					}
-				} else {
-					view.mostrarMensaje("ERROR: Agenda no encontrada");
+					break;
+				case 4:
+					// 4.- Eliminar contacto.
+					c = view.seleccionarContacto(agenda);
+					if (c != null) {
+						int indice = agenda.getListaContactos().indexOf(c);
+						agenda.getListaContactos().remove(indice);
+
+					}
+					break;
+				case 5:
+					// 5.- Importar contactos de otra agenda.
+					telefono = view.leerTelefono();
+					archivo = buscarAgenda(telefono);
+					if (archivo != null) {
+						Agenda nuevaAgenda = Agenda.cargarAgendaDeArchivo(archivo);
+						for (Contacto contacto : nuevaAgenda.getListaContactos()) {
+							agenda.getListaContactos().add(contacto);
+						}
+					} else {
+						view.mostrarMensaje("ERROR: Agenda no encontrada");
+						Thread.sleep(1500);
+					}
+					break;
+
+				default:
+					salir = true;
+					break;
 				}
-				break;
-			default:
-				break;
-			}
+			} while (!salir);
 		} else {
 			// Crear la agenda
 			agenda = view.crearAgenda(nTelefono);

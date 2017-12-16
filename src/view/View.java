@@ -81,8 +81,8 @@ public class View {
 	public int mostrarOpcionesEmpleado() {
 		System.out.println("Elige la opcion deseada:\n" + "1.- Editar mi información personal.\n"
 				+ "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n" + "4.- Eliminar contacto.\n"
-				+ "5.- Importar contactos de otra agenda.");
-		return leerOpcionesMenu(5);
+				+ "5.- Importar contactos de otra agenda.\n6.-Salir");
+		return leerOpcionesMenu(6);
 	}
 
 	public Agenda crearAgenda(int nTelefono) {
@@ -168,16 +168,17 @@ public class View {
 		return c;
 	}
 
-	public Contacto seleccionarContacto(Agenda a) {
+	public Contacto seleccionarContacto(Agenda a) throws InterruptedException {
 		ArrayList<Contacto> lista = (ArrayList<Contacto>) a.getListaContactos();
 		if (!lista.isEmpty()) {
 			System.out.println("Introduce una opcion para seleccionar un contacto:");
 			for (int i = 0; i < lista.size(); i++) {
 				System.out.println(i + 1 + ".-" + lista.get(i).getName());
 			}
-			return lista.get(leerOpcionesMenu(lista.size() - 1));
+			return lista.get(leerOpcionesMenu(lista.size())-1);
 		} else {
 			System.out.println("No hay contactos.");
+			Thread.sleep(1500);
 			return null;
 		}
 	}
