@@ -8,11 +8,24 @@ import enums.GruposSanguineos;
 public class Empleado implements Serializable {
 
 	private static final long serialVersionUID = -815500801588612332L;
-	
+
 	private Integer nTel;
 	private String name, surname, birthDate, departament, startDate;
 	private List<String> listCode;
-	private GruposSanguineos gruposSanguineos;
+	private String gruposSanguineo;
+
+	public Empleado(Integer nTel, String name, String surname, String birthDate, String departament, String startDate,
+			List<String> listCode, String gruposSanguineo) {
+		super();
+		this.nTel = nTel;
+		this.name = name;
+		this.surname = surname;
+		this.birthDate = birthDate;
+		this.departament = departament;
+		this.startDate = startDate;
+		this.listCode = listCode;
+		this.gruposSanguineo = gruposSanguineo;
+	}
 
 	public Integer getnTel() {
 		return nTel;
@@ -71,11 +84,11 @@ public class Empleado implements Serializable {
 	}
 
 	public GruposSanguineos getGruposSanguineos() {
-		return gruposSanguineos;
+		return GruposSanguineos.valueOf(gruposSanguineo);
 	}
 
-	public void setGruposSanguineos(GruposSanguineos gruposSanguineos) {
-		this.gruposSanguineos = gruposSanguineos;
+	public void setGruposSanguineos(GruposSanguineos gruposSanguineo) {
+		this.gruposSanguineo = gruposSanguineo.toString();
 	}
 
 }

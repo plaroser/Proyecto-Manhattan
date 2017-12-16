@@ -9,9 +9,9 @@ public enum TipoDeArchivos {
 		this.value = value;
 	}
 
-	public static TipoDeArchivos getTipo(String tipo) {
+	public static TipoDeArchivos getTipo(String extension) {
 		for (TipoDeArchivos element : TipoDeArchivos.values()) {
-			if(element.toString().equals(tipo)) {
+			if(element.toString().equals(extension)) {
 				return element;
 			}
 		}

@@ -3,9 +3,13 @@ package models;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -16,20 +20,29 @@ import enums.TipoDeArchivos;
 
 public class Agenda implements Serializable {
 
+	public static final String ALIAS = "Agenda";
+	public static final String RUTA_AGENDAS = "c:\\agendas\\";
 	private static final long serialVersionUID = 943295793237719639L;
 
 	private Empleado empleado;
 	private List<Contacto> listaContactos;
-	private TipoDeArchivos tipoDeArchivo;
+	private String tipoDeArchivo;
 	private final static XStream xstreamXML = new XStream();
-	private static XStream xstreamJSon = new XStream(new JettisonMappedXmlDriver());
+
+	public Agenda(Empleado empleado, List<Contacto> listaContactos, String tipoDeArchivo) {
+		super();
+		this.empleado = empleado;
+		this.listaContactos = listaContactos;
+		this.tipoDeArchivo = tipoDeArchivo;
+		xstreamXML.alias(Agenda.ALIAS, Agenda.class);
+	}
 
 	public TipoDeArchivos getTipoDeArchivo() {
-		return tipoDeArchivo;
+		return TipoDeArchivos.getTipo(tipoDeArchivo);
 	}
 
 	public void setTipoDeArchivo(TipoDeArchivos tipoDeArchivo) {
-		this.tipoDeArchivo = tipoDeArchivo;
+		this.tipoDeArchivo = tipoDeArchivo.toString();
 	}
 
 	public Empleado getEmpleado() {
@@ -49,9 +62,10 @@ public class Agenda implements Serializable {
 	}
 
 	public static Agenda cargarAgendaDeArchivo(File archivo) {
-		String[] s = archivo.getName().split(".");
+		String[] s = archivo.getName().split("\\.(?=[^\\.]+$)");
 		String extension = s[s.length - 1];
-		switch (TipoDeArchivos.getTipo(extension)) {
+		System.out.println(TipoDeArchivos.getTipo("." + extension));
+		switch (TipoDeArchivos.getTipo("." + extension)) {
 		case json:
 			return cargarAgendaJSon(archivo);
 
@@ -79,10 +93,13 @@ public class Agenda implements Serializable {
 
 	private static Agenda cargarAgendaJSon(File archivo) {
 
-		xstreamJSon.alias("product", Agenda.class);
+		XStream xstreamJSon = new XStream(new JettisonMappedXmlDriver());
+		xstreamJSon.alias(Agenda.ALIAS, Agenda.class);
+
 		Agenda agenda = null;
 		try {
-			agenda = (Agenda) xstreamJSon.fromXML(new String(Files.readAllBytes(archivo.toPath())));
+			String json = new String(Files.readAllBytes(archivo.toPath()));
+			agenda = (Agenda) xstreamJSon.fromXML(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -115,4 +132,83 @@ public class Agenda implements Serializable {
 		return o;
 	}
 
+	public void guardarAgenda(Agenda a) {
+		switch (a.getTipoDeArchivo()) {
+		case json:
+			guardarAgendaJSon(a);
+		case xml:
+			guardarAgendaXML(a);
+		case serializado:
+			guardarAgendaJSer(a);
+		default:
+			break;
+		}
+	}
+
+	private boolean guardarAgendaXML(Agenda a) {
+		boolean esCorrecto = false;
+		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.xml) {
+			XStream xstreamML = new XStream();
+			Writer writerXML = null;
+			try {
+				writerXML = new FileWriter(
+						Agenda.RUTA_AGENDAS + a.getEmpleado().getnTel() + a.getTipoDeArchivo().toString(), false);
+				xstreamML.alias(Agenda.ALIAS, Agenda.class);
+				writerXML.write(xstreamML.toXML(a));
+				writerXML.close();
+				esCorrecto = true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				esCorrecto = false;
+			}
+		}
+		return esCorrecto;
+	}
+
+	private boolean guardarAgendaJSon(Agenda a) {
+		boolean esCorrecto = false;
+		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.json) {
+			XStream xstream = new XStream(new JettisonMappedXmlDriver());
+			Writer writerXML = null;
+			xstream.setMode(XStream.NO_REFERENCES);
+			xstream.alias(Agenda.ALIAS, Agenda.class);
+			try {
+				writerXML = new FileWriter(
+						Agenda.RUTA_AGENDAS + a.getEmpleado().getnTel() + a.getTipoDeArchivo().toString(), false);
+				writerXML.write(xstream.toXML(a));
+				writerXML.close();
+				esCorrecto = true;
+
+			} catch (Exception e) {
+				esCorrecto = false;
+			}
+		}
+		return esCorrecto;
+	}
+
+	private boolean guardarAgendaJSer(Agenda a) {
+		boolean esCorrecto = false;
+		if (a != null && a.getTipoDeArchivo() == TipoDeArchivos.serializado) {
+			try {
+				writeObject(Agenda.RUTA_AGENDAS + a.getEmpleado().getnTel() + a.tipoDeArchivo.toString(), a);
+				esCorrecto = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				esCorrecto = false;
+			}
+		}
+		return esCorrecto;
+	}
+
+	private static <T extends Serializable> void writeObject(String pathDest, T object)
+			throws FileNotFoundException, IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathDest));
+		try {
+			out.writeObject(object);
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+	}
 }
