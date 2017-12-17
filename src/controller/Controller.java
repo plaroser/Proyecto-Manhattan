@@ -135,7 +135,7 @@ public class Controller {
 		}
 		Lector l = new Lector();
 		try {
-			Path path = Paths.get("c:\\agendas");
+			Path path = Paths.get(Agenda.RUTA_AGENDAS);
 			Files.walkFileTree(path, l);
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -143,7 +143,68 @@ public class Controller {
 		return l.agenda;
 	}
 
-	private void opcionesDirector() {
+	private Agenda[] buscarListaDeAgendas() {
+		class Lector extends SimpleFileVisitor<Path> {
+			public ArrayList<Agenda> lista = new ArrayList<>();
 
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+				File archivo = new File(file.toString());
+				Agenda a = Agenda.cargarAgendaDeArchivo(archivo);
+				if (a != null) {
+					lista.add(a);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+		}
+		Lector l = new Lector();
+		try {
+			Path path = Paths.get(Agenda.RUTA_AGENDAS);
+			Files.walkFileTree(path, l);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return l.lista.toArray(new Agenda[l.lista.size()]);
+	}
+
+	private void opcionesDirector() {
+		Agenda[] agendas = buscarListaDeAgendas();
+		// Si encuentra agendas
+		if (agendas.length > 0) {
+			boolean salir = false;
+			do {
+				int opcion = view.menuDirector();
+				switch (opcion) {
+				// 1.- Ver todos los empleados y contactos.
+				case 1:
+					for (Agenda a : agendas) {
+						view.imprimirAgenda(a);
+					}
+					break;
+				// 2.- Ver contactps especiales de un empleado.
+				case 2:
+					Agenda agendaSeleccionada = view.seleccionarAgenda(agendas);
+					view.mostarContactosEspeciales(agendaSeleccionada);
+					break;
+				// 3.- Ver empleados por Departamento.
+				case 3:
+					view.mostrarEmpleadosPorDepartamento(agendas);
+					break;
+				// 4.- Ver empleados por grupo sanguineo.
+				case 4:
+
+					break;
+				// 5.- Ver los efectivos de una operacion.
+				case 5:
+
+					break;
+				default:
+					break;
+				}
+			} while (!salir);
+			// Si no encuentra agendas
+		} else {
+			view.mostrarMensaje("No exixten agendas.");
+		}
 	}
 }

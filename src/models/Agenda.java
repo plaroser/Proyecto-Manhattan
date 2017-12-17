@@ -231,7 +231,7 @@ public class Agenda implements Serializable {
 	@Override
 	public String toString() {
 		String salida = "";
-		salida += empleado.toString() + "----------\nLista de contactos: ";
+		salida += empleado.toString() + "Lista de contactos: \n----------\n";
 
 		for (Contacto contacto : listaContactos) {
 			salida += "\t" + contacto.toString();

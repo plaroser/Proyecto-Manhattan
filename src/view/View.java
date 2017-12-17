@@ -82,9 +82,10 @@ public class View {
 	}
 
 	public int mostrarOpcionesEmpleado() {
-		System.out.println("====================\nLista de opciones:\n====================\n" + "1.- Editar mi información personal.\n"
-				+ "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n" + "4.- Eliminar contacto.\n"
-				+ "5.- Ver contactos\n" + "6.- Importar contactos de otra agenda.\n7.-Salir");
+		System.out.println("====================\nLista de opciones:\n====================\n"
+				+ "1.- Editar mi información personal.\n" + "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n"
+				+ "4.- Eliminar contacto.\n" + "5.- Ver contactos\n"
+				+ "6.- Importar contactos de otra agenda.\n7.-Salir");
 		return leerOpcionesMenu(6);
 	}
 
@@ -225,5 +226,63 @@ public class View {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int menuDirector() {
+		System.out.println("====================\nLista de opciones:\n====================\n"
+				+ "1.- Ver todos los empleados y contactos.\n" + "2.- Ver contactps especiales de un empleado.\n"
+				+ "3.- Ver empleados por Departamento.\n" + "4.- Ver empleados por grupo sanguineo.\n"
+				+ "5.- Ver los efectivos de una operacion.");
+		return leerOpcionesMenu(5);
+	}
+
+	public void imprimirAgenda(Agenda a) {
+		System.out.println(a.toString());
+	}
+
+	public Agenda seleccionarAgenda(Agenda[] agendas) {
+		String salida = "";
+		salida += "====================\nSeleccione un empleado:\n====================\n----------\n";
+		for (int i = 0; i < agendas.length; i++) {
+			salida += i + 1 + ".- " + agendas[i].getEmpleado().getName() + "\n----------\n";
+		}
+		System.out.print(salida);
+		int opcion = leerOpcionesMenu(agendas.length);
+		return agendas[opcion - 1];
+	}
+
+	public void mostarContactosEspeciales(Agenda a) {
+		String salida = "";
+		boolean tieneEspeciales = false;
+		salida += "Lista de contactos especiales:\n";
+		for (Contacto c : a.getListaContactos()) {
+			if (c.isSpecial()) {
+				tieneEspeciales = true;
+				salida += c.toString() + " \n";
+			}
+		}
+		if (!tieneEspeciales) {
+			salida = "No dispone de contactos especiales.";
+		}
+		System.out.println(salida);
+	}
+
+	public void mostrarEmpleadosPorDepartamento(Agenda[] agendas) {
+		ArrayList<Agenda> lista = new ArrayList<>();
+		for (Agenda a : agendas) {
+			lista.add(a);
+		}
+		lista.sort(Agenda.porDepartamento);
+		String departamentoActual = lista.get(0).getEmpleado().getDepartament();
+		String salida = "====================\nEmpleados por departamento:\n====================\n" + "Departamento: "+ departamentoActual + "\n";
+		for (Agenda a : lista) {
+			if (a.getEmpleado().getDepartament().equals(departamentoActual)) {
+			} else {
+				departamentoActual = a.getEmpleado().getDepartament();
+				salida += "Departamento: "+departamentoActual + "\n--------------------\n";
+			}
+			salida += a.getEmpleado().toString() + "\n---\n";
+		}
+		System.out.println(salida);
 	}
 }

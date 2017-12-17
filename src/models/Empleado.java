@@ -96,7 +96,7 @@ public class Empleado implements Serializable {
 		String salida = "";
 		salida += "Empleado: " + name + "\n" + "Apellidos: " + surname + "\n" + "Numero de telefono: " + nTel + "\n"
 				+ "F nacimiento: " + birthDate + "\n" + "Departamento: " + departament + "\n"
-				+ "F de inicio en el servicio: " + startDate + "\nLista de codigos:\n---------";
+				+ "F de inicio en el servicio: " + startDate + "\nLista de codigos:\n---------\n";
 		for (String s : listCode) {
 			salida += "\t-" + s + "\n";
 		}
