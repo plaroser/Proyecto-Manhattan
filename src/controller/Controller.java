@@ -21,12 +21,15 @@ import view.View;
  */
 public class Controller {
 
-	View view;
+	private View view;
 	private int nTelefono;
+	private Agenda agenda;
+	private int telefono;
+	private File archivo;
 
 	public void startProgram() {
 		File theDir = new File(Agenda.RUTA_AGENDAS);
-
+		agenda = null;
 		if (!theDir.exists()) {
 			try {
 				theDir.mkdir();
@@ -48,12 +51,12 @@ public class Controller {
 
 	private void opcionesEmpleado() {
 		// Lee el telefono
-		int telefono = view.leerTelefono();
+		telefono = view.leerTelefono();
 		// Busca el archivo en el dispositivo
-		File archivo = buscarAgenda(telefono);
+		archivo = buscarAgenda(telefono);
 		// Establece el numero de telefono
 		this.nTelefono = telefono;
-		Agenda agenda = null;
+
 		// Si ha encontrado el archivo
 		if (archivo != null)
 			agenda = Agenda.cargarAgendaDeArchivo(archivo);
@@ -64,33 +67,22 @@ public class Controller {
 				// Muestra el menu de empleado
 				int opcion = view.mostrarOpcionesEmpleado();
 				switch (opcion) {
-
+				
 				case 1:
 					// 1.- Editar mi información personal.\n"
 					agenda = view.editarInformacion(telefono, (ArrayList<Contacto>) agenda.getListaContactos());
 					break;
 				case 2:
 					// 2.- Añadir contacto.
-					ArrayList<Contacto> listaContactos = (ArrayList<Contacto>) agenda.getListaContactos();
-					listaContactos.add(view.crearContacto());
+					aniadirContacto();
 					break;
 				case 3:
 					// 3.- Actualizar contacto.
-					Contacto c = view.seleccionarContacto(agenda);
-					if (c != null) {
-						int indice = agenda.getListaContactos().indexOf(c);
-						c = view.crearContacto();
-						agenda.getListaContactos().set(indice, c);
-					}
+					actualizarContacto();
 					break;
 				case 4:
 					// 4.- Eliminar contacto.
-					c = view.seleccionarContacto(agenda);
-					if (c != null) {
-						int indice = agenda.getListaContactos().indexOf(c);
-						agenda.getListaContactos().remove(indice);
-						view.mostrarMensaje("Contacto eliminado con exito!");
-					}
+					eliminarContacto();
 					break;
 				case 5:
 					// 5.- Ver contactos
@@ -98,20 +90,7 @@ public class Controller {
 					break;
 				case 6:
 					// 6.- Importar contactos de otra agenda.
-					telefono = view.leerTelefono();
-					archivo = buscarAgenda(telefono);
-					if (archivo != null) {
-						Agenda nuevaAgenda = Agenda.cargarAgendaDeArchivo(archivo);
-						if (!nuevaAgenda.getListaContactos().isEmpty()) {
-							for (Contacto contacto : nuevaAgenda.getListaContactos()) {
-								agenda.getListaContactos().add(contacto);
-							}
-							view.mostrarMensaje("Contactos importados con exito!");
-						} else
-							view.mostrarMensaje("No contiene contactos");
-					} else {
-						view.mostrarMensaje("ERROR: Agenda no encontrada");
-					}
+					importarContactos();
 					break;
 
 				case 7:
@@ -126,6 +105,58 @@ public class Controller {
 			}
 			Agenda.guardarAgenda(agenda);
 		} while (!salir);
+	}
+
+	private void importarContactos() {
+		telefono = view.leerTelefono();
+		archivo = buscarAgenda(telefono);
+		if (archivo != null) {
+			Agenda nuevaAgenda = Agenda.cargarAgendaDeArchivo(archivo);
+			if (!nuevaAgenda.getListaContactos().isEmpty()) {
+				for (Contacto contacto : nuevaAgenda.getListaContactos()) {
+					agenda.getListaContactos().add(contacto);
+				}
+				view.mostrarMensaje("Contactos importados con exito!");
+			} else
+				view.mostrarMensaje("No contiene contactos");
+		} else {
+			view.mostrarMensaje("ERROR: Agenda no encontrada");
+		}
+	}
+
+	private void eliminarContacto() {
+		Contacto c = view.seleccionarContacto(agenda);
+		if (c != null) {
+			int indice = agenda.getListaContactos().indexOf(c);
+			agenda.getListaContactos().remove(indice);
+			view.mostrarMensaje("Contacto eliminado con exito!");
+		}
+	}
+
+	private void actualizarContacto() {
+		Contacto c = view.seleccionarContacto(agenda);
+		if (c != null) {
+			int indice = agenda.getListaContactos().indexOf(c);
+			c = view.crearContacto();
+			agenda.getListaContactos().set(indice, c);
+		}
+	}
+
+	private void aniadirContacto() {
+		ArrayList<Contacto> listaContactos = (ArrayList<Contacto>) agenda.getListaContactos();
+		Contacto c = view.crearContacto();
+		if (c.isSpecial()) {
+			int contadorEspeciales = 0;
+			for (Contacto contacto : listaContactos) {
+				if (contacto.isSpecial())
+					contadorEspeciales++;
+			}
+			if (contadorEspeciales >= 5) {
+				c.setSpecial(false);
+				view.mostrarMensaje("Lista de contactos especiales llena. Se guardara como contacto normal");
+			}
+		}
+		listaContactos.add(c);
 	}
 
 	private File buscarAgenda(int numeroTelefono) {
