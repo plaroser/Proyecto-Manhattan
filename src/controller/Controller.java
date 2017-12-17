@@ -25,6 +25,15 @@ public class Controller {
 	private int nTelefono;
 
 	public void startProgram() {
+		File theDir = new File(Agenda.RUTA_AGENDAS);
+
+		if (!theDir.exists()) {
+			try {
+				theDir.mkdir();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		view = new View();
 
 		switch (view.mostarMenuPrincipal()) {
