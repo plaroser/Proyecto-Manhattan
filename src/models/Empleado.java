@@ -91,4 +91,17 @@ public class Empleado implements Serializable {
 		this.gruposSanguineo = gruposSanguineo.toString();
 	}
 
+	@Override
+	public String toString() {
+		String salida = "";
+		salida += "Empleado: " + name + "\n" + "Apellidos: " + surname + "\n" + "Numero de telefono: " + nTel + "\n"
+				+ "F nacimiento: " + birthDate + "\n" + "Departamento: " + departament + "\n"
+				+ "F de inicio en el servicio: " + startDate + "\nLista de codigos:\n---------";
+		for (String s : listCode) {
+			salida += "\t-" + s + "\n";
+		}
+		salida += "---------\nGrupo sanguineo: " + gruposSanguineo + "\n";
+		return salida;
+	}
+
 }

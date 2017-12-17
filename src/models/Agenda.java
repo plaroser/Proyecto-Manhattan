@@ -23,6 +23,7 @@ public class Agenda implements Serializable {
 
 	public static final String ALIAS = "Agenda";
 	public static final String RUTA_AGENDAS = "c:\\agendas\\";
+
 	private static final long serialVersionUID = 943295793237719639L;
 
 	private Empleado empleado;
@@ -221,5 +222,17 @@ public class Agenda implements Serializable {
 				out.close();
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		String salida = "";
+		salida += empleado.toString() + "----------\nLista de contactos: ";
+
+		for (Contacto contacto : listaContactos) {
+			salida += "\t" + contacto.toString();
+		}
+		salida += "----------\n";
+		return salida;
 	}
 }
