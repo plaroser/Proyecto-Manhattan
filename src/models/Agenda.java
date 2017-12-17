@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.util.Comparator;
 import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
@@ -29,6 +30,8 @@ public class Agenda implements Serializable {
 	private Empleado empleado;
 	private List<Contacto> listaContactos;
 	private String tipoDeArchivo;
+	private Comparator<Agenda> porDepartamento;
+
 	// private static XStream xstreamXML = new XStream();
 
 	public Agenda(Empleado empleado, List<Contacto> listaContactos, String tipoDeArchivo) {
@@ -36,6 +39,8 @@ public class Agenda implements Serializable {
 		this.empleado = empleado;
 		this.listaContactos = listaContactos;
 		this.tipoDeArchivo = tipoDeArchivo;
+		porDepartamento = (Agenda a1, Agenda a2) -> a1.getEmpleado().getDepartament()
+				.compareTo(a2.getEmpleado().getDepartament());
 	}
 
 	public TipoDeArchivos getTipoDeArchivo() {
@@ -234,5 +239,9 @@ public class Agenda implements Serializable {
 		}
 		salida += "----------\n";
 		return salida;
+	}
+
+	public Comparator<Agenda> getPorDepartamento() {
+		return porDepartamento;
 	}
 }
