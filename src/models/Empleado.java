@@ -87,6 +87,10 @@ public class Empleado implements Serializable {
 		return GruposSanguineos.valueOf(gruposSanguineo);
 	}
 
+	public String getStringGrupoSanguineo() {
+		return gruposSanguineo;
+	}
+
 	public void setGruposSanguineos(GruposSanguineos gruposSanguineo) {
 		this.gruposSanguineo = gruposSanguineo.toString();
 	}
@@ -96,11 +100,13 @@ public class Empleado implements Serializable {
 		String salida = "";
 		salida += "Empleado: " + name + "\n" + "Apellidos: " + surname + "\n" + "Numero de telefono: " + nTel + "\n"
 				+ "F nacimiento: " + birthDate + "\n" + "Departamento: " + departament + "\n"
-				+ "F de inicio en el servicio: " + startDate + "\nLista de codigos:\n---------\n";
+				+ "F de inicio en el servicio: " + startDate + "\n";
+		salida += "Grupo sanguineo: " + gruposSanguineo + "\n" + "Lista de codigos:\n";
 		for (String s : listCode) {
 			salida += "\t-" + s + "\n";
 		}
-		salida += "---------\nGrupo sanguineo: " + gruposSanguineo + "\n";
+		if (listCode.isEmpty())
+			salida += "\tLista vacia.";
 		return salida;
 	}
 

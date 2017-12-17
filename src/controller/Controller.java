@@ -192,7 +192,7 @@ public class Controller {
 					break;
 				// 4.- Ver empleados por grupo sanguineo.
 				case 4:
-
+					view.mostrarEmpleadosPorGrupoSanguineo(agendas);
 					break;
 				// 5.- Ver los efectivos de una operacion.
 				case 5:

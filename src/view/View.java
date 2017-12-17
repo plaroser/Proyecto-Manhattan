@@ -230,7 +230,7 @@ public class View {
 
 	public int menuDirector() {
 		System.out.println("====================\nLista de opciones:\n====================\n"
-				+ "1.- Ver todos los empleados y contactos.\n" + "2.- Ver contactps especiales de un empleado.\n"
+				+ "1.- Ver todos los empleados y contactos.\n" + "2.- Ver contactos especiales de un empleado.\n"
 				+ "3.- Ver empleados por Departamento.\n" + "4.- Ver empleados por grupo sanguineo.\n"
 				+ "5.- Ver los efectivos de una operacion.");
 		return leerOpcionesMenu(5);
@@ -274,14 +274,33 @@ public class View {
 		}
 		lista.sort(Agenda.porDepartamento);
 		String departamentoActual = lista.get(0).getEmpleado().getDepartament();
-		String salida = "====================\nEmpleados por departamento:\n====================\n" + "Departamento: "+ departamentoActual + "\n";
+		String salida = "====================\nEmpleados por departamento:\n====================\n" + "Departamento: "
+				+ departamentoActual + "\n";
 		for (Agenda a : lista) {
-			if (a.getEmpleado().getDepartament().equals(departamentoActual)) {
-			} else {
+			if (!a.getEmpleado().getDepartament().equals(departamentoActual)) {
 				departamentoActual = a.getEmpleado().getDepartament();
-				salida += "Departamento: "+departamentoActual + "\n--------------------\n";
+				salida += "Departamento: " + departamentoActual + "\n--------------------\n";
 			}
 			salida += a.getEmpleado().toString() + "\n---\n";
+		}
+		System.out.println(salida);
+	}
+
+	public void mostrarEmpleadosPorGrupoSanguineo(Agenda[] agendas) {
+		ArrayList<Agenda> lista = new ArrayList<>();
+		for (Agenda a : agendas) {
+			lista.add(a);
+		}
+		lista.sort(Agenda.porGrupoSanguineo);
+		String grupoActual = lista.get(0).getEmpleado().getStringGrupoSanguineo();
+		String salida = "====================\nEmpleados por Grupo Sanguineo:\n====================\n"
+				+ "************************\nGrupo Sanguineo: " + grupoActual + "\n************************\n";
+		for (Agenda a : lista) {
+			if (!a.getEmpleado().getStringGrupoSanguineo().equals(grupoActual)) {
+				grupoActual = a.getEmpleado().getStringGrupoSanguineo();
+				salida += "************************\nGrupo Sanguineo: " + grupoActual + "\n************************\n";
+			}
+			salida += a.getEmpleado().toString() + "\n--------------------------------------\n";
 		}
 		System.out.println(salida);
 	}

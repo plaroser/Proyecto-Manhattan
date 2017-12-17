@@ -26,6 +26,8 @@ public class Agenda implements Serializable {
 	public static final String RUTA_AGENDAS = "c:\\agendas\\";
 	public static final Comparator<Agenda> porDepartamento = (Agenda a1, Agenda a2) -> a1.getEmpleado().getDepartament()
 			.compareTo(a2.getEmpleado().getDepartament());
+	public static final Comparator<Agenda> porGrupoSanguineo = (Agenda a1, Agenda a2) -> a1.getEmpleado()
+			.getStringGrupoSanguineo().compareTo(a2.getEmpleado().getStringGrupoSanguineo());
 
 	private static final long serialVersionUID = 943295793237719639L;
 
