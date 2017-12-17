@@ -232,8 +232,8 @@ public class View {
 		System.out.println("====================\nLista de opciones:\n====================\n"
 				+ "1.- Ver todos los empleados y contactos.\n" + "2.- Ver contactos especiales de un empleado.\n"
 				+ "3.- Ver empleados por Departamento.\n" + "4.- Ver empleados por grupo sanguineo.\n"
-				+ "5.- Ver los efectivos de una operacion.");
-		return leerOpcionesMenu(5);
+				+ "5.- Ver los efectivos de una operacion.\n6.- Salir");
+		return leerOpcionesMenu(6);
 	}
 
 	public void imprimirAgenda(Agenda a) {
@@ -304,4 +304,28 @@ public class View {
 		}
 		System.out.println(salida);
 	}
+
+	public void seleccionarOperacion(Agenda[] agendas) {
+		ArrayList<String> listaOperaciones = new ArrayList<>();
+		for (Agenda a : agendas) {
+			if (!a.getEmpleado().getListCode().isEmpty()) {
+				for (String codigo : a.getEmpleado().getListCode()) {
+					if (!listaOperaciones.contains(codigo)) {
+						listaOperaciones.add(codigo);
+					}
+				}
+			}
+		}
+		String salida = "";
+		for (String operacion : listaOperaciones) {
+			salida += "**********\nOperacion: " + operacion + "\n**********\n";
+			for (Agenda a : agendas) {
+				if (a.getEmpleado().getListCode().contains(operacion)) {
+					salida += a.getEmpleado().getName() + "\n";
+				}
+			}
+		}
+		System.out.println(salida);
+	}
+
 }
