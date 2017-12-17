@@ -8,10 +8,25 @@ import enums.GruposSanguineos;
 public class Empleado implements Serializable {
 
 	private static final long serialVersionUID = -815500801588612332L;
-
+	/**
+	 * Alias de Empleado para guardarlo en fichero
+	 */
+	public static final String ALIAS = "Empleado";
+	/**
+	 * Numero de telefono del contacto
+	 */
 	private Integer nTel;
+	/**
+	 * Atributo de empleado
+	 */
 	private String name, surname, birthDate, departament, startDate;
+	/**
+	 * Lista de codigos de operaciones
+	 */
 	private List<String> listCode;
+	/**
+	 * Grupo sanguineo del empleado
+	 */
 	private String gruposSanguineo;
 
 	public Empleado(Integer nTel, String name, String surname, String birthDate, String departament, String startDate,

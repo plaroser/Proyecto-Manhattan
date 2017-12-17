@@ -5,9 +5,21 @@ import java.io.Serializable;
 public class Contacto implements Serializable {
 
 	private static final long serialVersionUID = 7113840444049277238L;
-
+	/**
+	 * Alias de Contacto para guardarlo en la agenda
+	 */
+	public static final String ALIAS = "Contacto";
+	/**
+	 * Numero de telefono del contacto
+	 */
 	private int nTelf;
+	/**
+	 * Nombre del contacto
+	 */
 	private String name;
+	/**
+	 * Contacto es especial o no
+	 */
 	private boolean isSpecial;
 
 	public int getnTelf() {

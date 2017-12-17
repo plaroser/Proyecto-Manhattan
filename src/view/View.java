@@ -61,6 +61,11 @@ public class View {
 		return opcion;
 	}
 
+	/**
+	 * Lee un numero de telefono del teclado
+	 * 
+	 * @return Numero de telefono leido
+	 */
 	public int leerTelefono() {
 		Scanner sc = new Scanner(System.in);
 		boolean esCorrecto;
@@ -81,6 +86,11 @@ public class View {
 		return numero;
 	}
 
+	/**
+	 * Muestra las opciones del empleado
+	 * 
+	 * @return Opcion elegida
+	 */
 	public int mostrarOpcionesEmpleado() {
 		System.out.println("====================\nLista de opciones:\n====================\n"
 				+ "1.- Editar mi información personal.\n" + "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n"
@@ -89,12 +99,28 @@ public class View {
 		return leerOpcionesMenu(6);
 	}
 
+	/**
+	 * Crea una agenda
+	 * 
+	 * @param nTelefono
+	 *            numero de telefono de la agenda
+	 * @return Agenda creada
+	 */
 	public Agenda crearAgenda(int nTelefono) {
 		System.out.println("Crear agenda...");
 		ArrayList<Contacto> listaContactos = new ArrayList<>(5);
 		return editarInformacion(nTelefono, listaContactos);
 	}
 
+	/**
+	 * Edita la informacion de una agenda
+	 * 
+	 * @param nTelefono
+	 *            Numero de telefono de la agenda
+	 * @param listaContactos
+	 *            Lista de contactos actual de la agenda
+	 * @return Agenda editada
+	 */
 	public Agenda editarInformacion(int nTelefono, ArrayList<Contacto> listaContactos) {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Introduce tu nombre: ");
@@ -117,6 +143,11 @@ public class View {
 		return new Agenda(a, listaContactos, tipo.toString());
 	}
 
+	/**
+	 * Muestra por pantalla una lista de Tipos de archivos y elige uno
+	 * 
+	 * @return Archivo elegido
+	 */
 	private TipoDeArchivos leerTipoDeArchivo() {
 		System.out.println("Selecciona tu tipo de archivo:");
 		TipoDeArchivos[] tipos = TipoDeArchivos.values();
@@ -126,6 +157,11 @@ public class View {
 		return tipos[leerOpcionesMenu(tipos.length) - 1];
 	}
 
+	/**
+	 * Crea una lista de codigos de operaciones
+	 * 
+	 * @return Lista de codigos de operaciones creado
+	 */
 	private ArrayList<String> leerListaCodigos() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Creando lista de codigos de operaciones.\n" + "");
@@ -149,6 +185,11 @@ public class View {
 		return listaCodigos;
 	}
 
+	/**
+	 * Lee un grupo sanguineo del teclado
+	 * 
+	 * @return GrupoSanguineo elegido
+	 */
 	private GruposSanguineos leerGrupoSanguineo() {
 
 		System.out.println("Introduce tu grupo sanguineo:");
@@ -159,6 +200,11 @@ public class View {
 		return grupos[leerOpcionesMenu(grupos.length) - 1];
 	}
 
+	/**
+	 * Crea un contacto de leyendo sus datos por teclado
+	 * 
+	 * @return Contacto creado
+	 */
 	public Contacto crearContacto() {
 		Scanner sc = new Scanner(System.in);
 		Contacto c = new Contacto();
@@ -180,6 +226,13 @@ public class View {
 		return c;
 	}
 
+	/**
+	 * Selecciona un contacto de una agenda
+	 * 
+	 * @param a
+	 *            Agenda donde buscar los contactos
+	 * @return Contacto seleccionado
+	 */
 	public Contacto seleccionarContacto(Agenda a) {
 		ArrayList<Contacto> lista = (ArrayList<Contacto>) a.getListaContactos();
 		if (!lista.isEmpty()) {
@@ -199,6 +252,12 @@ public class View {
 		}
 	}
 
+	/**
+	 * Mostrar por pantalla todos los contactos de una agenda
+	 * 
+	 * @param a
+	 *            Agenda para mostrar sus contactos
+	 */
 	public void verContactos(Agenda a) {
 		Scanner sc = new Scanner(System.in);
 		ArrayList<Contacto> lista = (ArrayList<Contacto>) a.getListaContactos();
@@ -219,6 +278,12 @@ public class View {
 		}
 	}
 
+	/**
+	 * Muestra un mensaje por pantalla y lo deja al principio durante un segundo
+	 * 
+	 * @param mensaje
+	 *            Mensaje a mostrar
+	 */
 	public void mostrarMensaje(String mensaje) {
 		System.out.println(mensaje);
 		try {
@@ -228,6 +293,11 @@ public class View {
 		}
 	}
 
+	/**
+	 * Muestra las opciones de director
+	 * 
+	 * @return Opcion elegida
+	 */
 	public int menuDirector() {
 		System.out.println("====================\nLista de opciones:\n====================\n"
 				+ "1.- Ver todos los empleados y contactos.\n" + "2.- Ver contactos especiales de un empleado.\n"
@@ -236,10 +306,23 @@ public class View {
 		return leerOpcionesMenu(6);
 	}
 
+	/**
+	 * Muestra una agenda por teclado
+	 * 
+	 * @param a
+	 *            Agenda a mostrar
+	 */
 	public void imprimirAgenda(Agenda a) {
 		System.out.println(a.toString());
 	}
 
+	/**
+	 * Muestra una lista de agendas por pantalla y selecciona una
+	 * 
+	 * @param agendas
+	 *            Lista de agendas a mostrar
+	 * @return Agenda seleccionada
+	 */
 	public Agenda seleccionarAgenda(Agenda[] agendas) {
 		String salida = "";
 		salida += "====================\nSeleccione un empleado:\n====================\n----------\n";
@@ -251,6 +334,12 @@ public class View {
 		return agendas[opcion - 1];
 	}
 
+	/**
+	 * Muestra los contactos especiales de una agenda
+	 * 
+	 * @param a
+	 *            Agenda a buscar contactos especiales
+	 */
 	public void mostarContactosEspeciales(Agenda a) {
 		String salida = "";
 		boolean tieneEspeciales = false;
@@ -267,6 +356,13 @@ public class View {
 		System.out.println(salida);
 	}
 
+	/**
+	 * Muestra todos los empleados de una lista de agendas ordenados por
+	 * departamento
+	 * 
+	 * @param agendas
+	 *            Lista de agendas a mostrar
+	 */
 	public void mostrarEmpleadosPorDepartamento(Agenda[] agendas) {
 		ArrayList<Agenda> lista = new ArrayList<>();
 		for (Agenda a : agendas) {
@@ -286,6 +382,13 @@ public class View {
 		System.out.println(salida);
 	}
 
+	/**
+	 * Muestra todos los empleados de una lista de agendas ordenados por grupo
+	 * sanguineo
+	 * 
+	 * @param agendas
+	 *            Lista de agendas a mostrar
+	 */
 	public void mostrarEmpleadosPorGrupoSanguineo(Agenda[] agendas) {
 		ArrayList<Agenda> lista = new ArrayList<>();
 		for (Agenda a : agendas) {
@@ -305,7 +408,13 @@ public class View {
 		System.out.println(salida);
 	}
 
-	public void seleccionarOperacion(Agenda[] agendas) {
+	/**
+	 * Muestra todos los empleados de una lista de agendas ordenados por operacion
+	 * 
+	 * @param agendas
+	 *            Lista de agendas a mostrar
+	 */
+	public void mostrarEmpleadosPorOperacion(Agenda[] agendas) {
 		ArrayList<String> listaOperaciones = new ArrayList<>();
 		for (Agenda a : agendas) {
 			if (!a.getEmpleado().getListCode().isEmpty()) {

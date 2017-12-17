@@ -269,7 +269,7 @@ public class Controller {
 					break;
 				// 5.- Ver los efectivos de una operacion.
 				case 5:
-					view.seleccionarOperacion(agendas);
+					view.mostrarEmpleadosPorOperacion(agendas);
 					break;
 				case 6:
 					salir = true;
