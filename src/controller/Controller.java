@@ -27,7 +27,10 @@ public class Controller {
 	private int telefono;
 	private File archivo;
 
-	public void startProgram() {
+	/**
+	 * Crea el controlador e inicia el programa
+	 */
+	public void Controler() {
 		File theDir = new File(Agenda.RUTA_AGENDAS);
 		agenda = null;
 		if (!theDir.exists()) {
@@ -49,6 +52,9 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Muestra las opciones de empleado
+	 */
 	private void opcionesEmpleado() {
 		// Lee el telefono
 		telefono = view.leerTelefono();
@@ -67,7 +73,7 @@ public class Controller {
 				// Muestra el menu de empleado
 				int opcion = view.mostrarOpcionesEmpleado();
 				switch (opcion) {
-				
+
 				case 1:
 					// 1.- Editar mi información personal.\n"
 					agenda = view.editarInformacion(telefono, (ArrayList<Contacto>) agenda.getListaContactos());
@@ -107,6 +113,9 @@ public class Controller {
 		} while (!salir);
 	}
 
+	/**
+	 * Importa los contactos de otra agenda
+	 */
 	private void importarContactos() {
 		telefono = view.leerTelefono();
 		archivo = buscarAgenda(telefono);
@@ -124,6 +133,9 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Elimina un contacto
+	 */
 	private void eliminarContacto() {
 		Contacto c = view.seleccionarContacto(agenda);
 		if (c != null) {
@@ -133,6 +145,9 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Actualiza un contacto
+	 */
 	private void actualizarContacto() {
 		Contacto c = view.seleccionarContacto(agenda);
 		if (c != null) {
@@ -142,6 +157,9 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Añade un contacto a la lista
+	 */
 	private void aniadirContacto() {
 		ArrayList<Contacto> listaContactos = (ArrayList<Contacto>) agenda.getListaContactos();
 		Contacto c = view.crearContacto();
@@ -159,6 +177,13 @@ public class Controller {
 		listaContactos.add(c);
 	}
 
+	/**
+	 * Busca una agenda en el dispositivo
+	 * 
+	 * @param numeroTelefono
+	 *            numero de agenda a mostrar
+	 * @return Agenda encontrada o null en el caso de que no exista
+	 */
 	private File buscarAgenda(int numeroTelefono) {
 		class Lector extends SimpleFileVisitor<Path> {
 			public File agenda = null;
@@ -183,6 +208,11 @@ public class Controller {
 		return l.agenda;
 	}
 
+	/**
+	 * Busca todas las agendas que existen en el dispositivo
+	 * 
+	 * @return lista de agendas encontradas
+	 */
 	private Agenda[] buscarListaDeAgendas() {
 		class Lector extends SimpleFileVisitor<Path> {
 			public ArrayList<Agenda> lista = new ArrayList<>();
@@ -207,6 +237,9 @@ public class Controller {
 		return l.lista.toArray(new Agenda[l.lista.size()]);
 	}
 
+	/**
+	 * Muestra las opciones disponibles para un director
+	 */
 	private void opcionesDirector() {
 		Agenda[] agendas = buscarListaDeAgendas();
 		// Si encuentra agendas
