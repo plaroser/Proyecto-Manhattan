@@ -24,13 +24,14 @@ public class Agenda implements Serializable {
 
 	public static final String ALIAS = "Agenda";
 	public static final String RUTA_AGENDAS = "c:\\agendas\\";
+	public static final Comparator<Agenda> porDepartamento = (Agenda a1, Agenda a2) -> a1.getEmpleado().getDepartament()
+			.compareTo(a2.getEmpleado().getDepartament());
 
 	private static final long serialVersionUID = 943295793237719639L;
 
 	private Empleado empleado;
 	private List<Contacto> listaContactos;
 	private String tipoDeArchivo;
-	private Comparator<Agenda> porDepartamento;
 
 	// private static XStream xstreamXML = new XStream();
 
@@ -39,8 +40,6 @@ public class Agenda implements Serializable {
 		this.empleado = empleado;
 		this.listaContactos = listaContactos;
 		this.tipoDeArchivo = tipoDeArchivo;
-		porDepartamento = (Agenda a1, Agenda a2) -> a1.getEmpleado().getDepartament()
-				.compareTo(a2.getEmpleado().getDepartament());
 	}
 
 	public TipoDeArchivos getTipoDeArchivo() {
@@ -241,7 +240,4 @@ public class Agenda implements Serializable {
 		return salida;
 	}
 
-	public Comparator<Agenda> getPorDepartamento() {
-		return porDepartamento;
-	}
 }
