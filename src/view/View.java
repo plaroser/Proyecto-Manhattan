@@ -96,7 +96,7 @@ public class View {
 				+ "1.- Editar mi información personal.\n" + "2.- Añadir contacto.\n" + "3.- Actualizar contacto.\n"
 				+ "4.- Eliminar contacto.\n" + "5.- Ver contactos\n"
 				+ "6.- Importar contactos de otra agenda.\n7.-Salir");
-		return leerOpcionesMenu(6);
+		return leerOpcionesMenu(7);
 	}
 
 	/**
