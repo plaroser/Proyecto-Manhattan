@@ -30,7 +30,7 @@ public class Controller {
 	/**
 	 * Crea el controlador e inicia el programa
 	 */
-	public void Controler() {
+	public Controller() {
 		File theDir = new File(Agenda.RUTA_AGENDAS);
 		agenda = null;
 		if (!theDir.exists()) {
